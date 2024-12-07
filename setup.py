@@ -15,9 +15,10 @@ def setup_dataset(
     )
 
     # Filter for classes
+    allowed_labels = [0, 2, 77, 84, 119]
     train_dataset, test_dataset = list[tf.data.Dataset]([datasets[0], datasets[1]])
-    train_dataset = train_dataset.filter(lambda img, label: label==0 or label==2 or label==77 or label==84 or label==119)
-    test_dataset = test_dataset.filter(lambda img, label: label==0 or label==2 or label==77 or label==84 or label==119)
+    train_dataset = train_dataset.filter(lambda img, label: tf.reduce_any(tf.equal(label, allowed_labels)))
+    test_dataset = test_dataset.filter(lambda img, label: tf.reduce_any(tf.equal(label, allowed_labels)))
 
     # Show examples
     if show_examples:
