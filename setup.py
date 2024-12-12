@@ -1,5 +1,7 @@
 import tensorflow_datasets as tfds
 import tensorflow as tf
+import matplotlib.pyplot as plt
+import numpy as np
 
 # Load dataset
 def setup_dataset(
@@ -9,7 +11,7 @@ def setup_dataset(
     ):
     """
     This function downloads the dataset and only keeps
-    the data specified in `labels`.  
+    the data specified in `labels`.
 
     It splitts the dataset in train and test dataset
     """
@@ -34,3 +36,13 @@ def setup_dataset(
         fig.show()
 
     return train_dataset, test_dataset, metadata
+
+"""
+train_dataset, test_dataset, metadata = setup_dataset()
+# Show label values
+print({int(y.numpy()) for x, y in train_dataset.concatenate(test_dataset)})
+# Show number of occurences
+images, labels = tuple(zip(*train_dataset))
+labels = np.array(labels)
+plt.hist(labels, bins=120)
+plt.show()"""
