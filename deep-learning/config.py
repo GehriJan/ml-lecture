@@ -9,4 +9,5 @@ DEBUG = True
 
 MODEL_FOLDER = 'models/'
 MODEL_FILENAME = 'dog_classifier.keras'
+TRANSFER_MODEL_FILENAME = 'dog_classifier_transfer_learning.keras'
 WEIGHTS_FILENAME = 'model.weights.h5'
