@@ -20,14 +20,22 @@ def setup_dataset(
         name="stanford_dogs",
         data_dir=data_dir,
         with_info=True,
-        split=['train[75%:]', 'test[:25%]'],
+        split='train',
     )
 
-    train_dataset, test_dataset = list[tf.data.Dataset]([datasets[0], datasets[1]])
+    filtered_dataset = datasets.filter(
+        lambda item: tf.reduce_any(tf.equal(item['label'], labels))
+    )
+    total_samples = len(list(filtered_dataset))
+    train_size = int(0.75 * total_samples)
 
-    # Filter for classes
-    train_dataset = train_dataset.filter(lambda item: tf.reduce_any(tf.equal(item['label'], labels)))
-    test_dataset = test_dataset.filter(lambda item: tf.reduce_any(tf.equal(item['label'], labels)))
+    # Split the filtered dataset into train and test
+    train_dataset = filtered_dataset.take(train_size)
+    test_dataset = filtered_dataset.skip(train_size)
+
+    print("Total Image count: ", total_samples)
+    print("Train Dataset Size:", len(list(train_dataset)))
+    print("Test Dataset Size:", len(list(test_dataset)))
 
     # Show examples
     if show_examples:
