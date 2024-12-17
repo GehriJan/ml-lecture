@@ -3,6 +3,7 @@ import keras
 import tensorflow as tf
 import numpy as np
 import random
+import math
 
 def visualize_history(history):
     # Loss-Werte
@@ -42,7 +43,6 @@ def visualize_history(history):
 def visualize_predictions(model_path, dataset, amount=10):
     # Load the model
     model = keras.models.load_model(model_path)
-    print("Model loaded successfully!")
 
     def predict_image(data):
         filename = data['image/filename'].numpy().decode('utf-8')
@@ -51,11 +51,7 @@ def visualize_predictions(model_path, dataset, amount=10):
         predictions = model.predict(tf.expand_dims(data["image"], axis=0))
         predicted_class = np.argmax(predictions, axis=-1)[0]
 
-        plt.title(f"Real: {real_dog_name} Predicted Label: {dogs[predicted_class]}")
-        plt.imshow(data['original_image'])
-        plt.axis("off")
-        plt.show()
-        print(data['image/filename'])
+        return real_dog_name, dogs[predicted_class], data['original_image']
 
     dataset_size = len(list(dataset))
     num_images_to_show = min(amount, dataset_size)
@@ -63,8 +59,26 @@ def visualize_predictions(model_path, dataset, amount=10):
 
     dogs = getDognames(dataset)
 
-    for data in sampled_images:
-        predict_image(data)
+    cols = 3
+    rows = math.ceil(num_images_to_show / cols)
+    fig, axes = plt.subplots(rows, cols, figsize=(15, rows * 5))
+
+    for i, data in enumerate(sampled_images):
+        real_dog_name, predicted_label, image = predict_image(data)
+
+        # Plot image in the grid
+        ax = axes[i // cols, i % cols]
+        ax.set_title(f"Real: {real_dog_name}\n    Pred: {predicted_label}")
+        ax.imshow(image)
+        ax.axis("off")
+
+    # Hide unused subplots if the grid is not fully occupied
+    for j in range(num_images_to_show, rows * cols):
+        fig.delaxes(axes[j // cols, j % cols])
+
+    plt.tight_layout()
+    plt.show()
+
 
 def getDognames(dataset):
     dognames = {}
