@@ -3,12 +3,13 @@ import tensorflow as tf
 from IPython.display import display
 import numpy as np
 
+
 # Load dataset
 def setup_dataset(
-        data_dir: str = "./dataset",
-        show_examples: bool = False,
-        labels = [0, 2, 77, 84, 119]
-    ):
+    data_dir: str = "./dataset",
+    show_examples: bool = False,
+    labels=[9, 77, 85, 118, 119],
+):
     """
     This function downloads the dataset and only keeps
     the data specified in `labels`.
@@ -27,6 +28,8 @@ def setup_dataset(
         lambda item: tf.reduce_any(tf.equal(item['label'], labels))
     )
     total_samples = len(list(filtered_dataset))
+    print(total_samples)
+    print(filtered_dataset.shape)
     train_size = int(0.75 * total_samples)
 
     # Split the filtered dataset into train and test
@@ -53,6 +56,7 @@ def setup_dataset(
     )
 
     return train_dataset, test_dataset, table, info
+
 
 def generateDatasetArrays(dataset):
     combined_dataset = dataset.map(lambda data: (data["image"], data["label"]))
