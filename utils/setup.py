@@ -28,8 +28,6 @@ def setup_dataset(
         lambda item: tf.reduce_any(tf.equal(item['label'], labels))
     )
     total_samples = len(list(filtered_dataset))
-    print(total_samples)
-    print(filtered_dataset.shape)
     train_size = int(0.75 * total_samples)
 
     # Split the filtered dataset into train and test
