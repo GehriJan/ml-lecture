@@ -79,15 +79,3 @@ def visualize_predictions(model_path, dataset, amount=10):
     plt.tight_layout()
     plt.show()
 
-
-def getDognames(dataset):
-    dognames = {}
-
-    for data in dataset:
-        if data['label'].numpy() in dognames:
-            continue
-        filename = data['image/filename'].numpy().decode('utf-8')
-        dog_name = filename.split('/')[1].split('-', 1)[1]
-        dognames[data['label'].numpy()] = dog_name
-
-    return dognames
