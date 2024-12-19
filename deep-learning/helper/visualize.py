@@ -4,6 +4,7 @@ import tensorflow as tf
 import numpy as np
 import random
 import math
+from utils.utils import getDognames
 
 def visualize_history(history):
     # Loss-Werte
